@@ -33,7 +33,7 @@ import org.mockito.kotlin.any // For better Kotlin compatibility
 
 ## RULE 2: MANDATORY TEST DATA FACTORIES 🏭
 
-**NEVER construct test objects inside @Test methods. ALWAYS use factory methods with direct object creation.**
+**NEVER construct or mock test objects inside @Test methods. ALWAYS use factory methods with direct object creation.**
 
 ### ❌ WRONG (Inline construction):
 ```kotlin
@@ -49,6 +49,11 @@ class UserServiceTest {
     fun `test registration`() {
         val user = User("other@example.com", "Jane") // ❌ NO! Duplicated
         // ...
+    }
+
+    @Test
+    fun `test password reset`() {
+        val user = mockk<User>()               // ❌ NO! Mocks are for dependencies, not data objects
     }
 }
 ```
@@ -150,7 +155,31 @@ private lateinit var emailService: EmailService          // ✅ Exact class name
 
 **Self-check:** Compare every class name in your code to the provided code → Must match exactly.
 
----
+## RULE 4: NO MOCKING EXTENTION FUNCTIONS
+
+**Do NOT mock extension functions directly. Instead, mock the underlying class or interface.**
+
+```kotlin
+fun MyService.myExtensionFunction(): String {
+    return this.getDataFromRepo().toUpperCase()
+}
+```
+
+### ❌ WRONG:
+```kotlin
+import io.mockk.every
+import io.mockk.mockk
+val myServiceMock = mockk<MyService>()
+every { myServiceMock.myExtensionFunction() } returns "MOCKED"  //❌ NO!
+```
+
+### ✅ CORRECT:
+```kotlin
+import io.mockk.every
+import io.mockk.mockk
+val myServiceMock = mockk<MyService>()
+every { myServiceMock.getDataFromRepo() } returns "mocked"  //✅ YES!
+```
 
 ## VERIFICATION CHECKLIST (Run Before Submitting)
 

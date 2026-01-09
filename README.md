@@ -7,6 +7,9 @@ Each prompt is structured to provide clear instructions for specific coding task
 
 ### Sammple Input Form for Unit Test Request
 
+The prompt itself is structured to gather necessary information for generating unit tests. You can just link the file you want to write tests.
+Additionally, can provide more context or specific scope.
+**Example:**  
 Write unit tests for UserService class that handles user creation and validation.
 Business rules:
 - Username and email are required fields.
@@ -18,4 +21,4 @@ Focus: Need complete coverage including edge cases, security and validation rule
 
 ### Code Review Prompt
 
-*Note*: To review a PR or a branch, can use agent to collect the code diff or changes, then feed into this prompt
+*Note*: To review a PR or a branch, can use AI agent to collect the code diff or changes, no need to paste entire code into prompt.
